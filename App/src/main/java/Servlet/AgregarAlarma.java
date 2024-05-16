@@ -66,21 +66,17 @@ public class AgregarAlarma extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ManagerSensores manager = new ManagerSensores();
-        if (verificarConexionDB() && manager.existenSensor()) {
-            response.sendRedirect("agregar_alarma.jsp");
-        } else {
-             String mensajeError = "Condiciones previas no cumplidas. Verifique la conexión a la base de datos y que existan Sensores.";
-            response.sendRedirect("index.html?error=" + URLEncoder.encode(mensajeError, "UTF-8"));
-            
-            }
-    }   
-    private boolean verificarConexionDB() {
-    try (Connection conn = DriverManager.getConnection("jdbc:mysql://mysql:3306/invernadero", "root", "12345")) {
-        return true;
-    } catch (SQLException e) {
-        return false;
+        response.sendRedirect("agregar_alarma.jsp");
     }
-}
+
+    private boolean verificarConexionDB() {
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://mysql:3306/invernadero", "root", "12345")) {
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *

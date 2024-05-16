@@ -1,4 +1,5 @@
 com\itson\socketsensores\Entrada.class
+com\itson\socketsensores\EncriptarSocket.class
 com\itson\socketsensores\Prueba.class
 com\itson\socketsensores\Hilo.class
 com\itson\socketsensores\SocketSensores.class

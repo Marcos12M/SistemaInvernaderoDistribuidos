@@ -15,7 +15,7 @@ public class FachadaDatosExternos implements IFachada{
     
     public FachadaDatosExternos(){
         if(datosServicio == null){
-            datosServicio = new DatosDAO("mysql", "3306", "datossensores", "root", "12345");
+            datosServicio = new DatosDAO("localhost", "3306", "datossensores", "root", "1234");
         }
     }
     

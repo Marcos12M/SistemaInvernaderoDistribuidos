@@ -3,3 +3,4 @@ DominioDatos\Datos.class
 Rabbit\Receptor.class
 com\mycompany\dao_sensores\DatosDAO.class
 com\mycompany\dao_sensores\IDatos.class
+Rabbit\DesencriptarSocket.class

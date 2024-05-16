@@ -1,3 +1,4 @@
 com\mycompany\sistemamensajeria\EmailSender$1.class
 com\mycompany\sistemamensajeria\receptor.class
+com\mycompany\sistemamensajeria\DesencriptarMensaje.class
 com\mycompany\sistemamensajeria\EmailSender.class

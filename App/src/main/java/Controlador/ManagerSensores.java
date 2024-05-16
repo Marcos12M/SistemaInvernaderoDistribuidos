@@ -19,9 +19,9 @@ import java.util.List;
 
 public class ManagerSensores {
 
-    private String url = "jdbc:mysql://mysql:3306/invernadero";
+    private String url = "jdbc:mysql://localhost:3306/invernadero";
     private String user = "root";
-    private String password = "12345";
+    private String password = "1234";
 
     private Connection getConnection() throws SQLException {
         try {

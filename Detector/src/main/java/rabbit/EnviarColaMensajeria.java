@@ -25,92 +25,69 @@ import java.util.logging.Logger;
  * @author hoshi
  */
 public class EnviarColaMensajeria {
+
     static String QUEUE_NAME = "ListaCompra";
     private static final String USERNAME = "admin";
-    private static final String RABBITMQ_HOST = "rabbitmq";
+    private static final String RABBITMQ_HOST = "localhost";
     private static final String PASSWORD = "password";
+    private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
+    private static final String KEY = "B/lUwQC\"`nI8Ze>+eI~qLSWEwbE`?Zt~";
     private Channel channel;
-    
+
     public EnviarColaMensajeria() {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setUsername(USERNAME);
-        factory.setPassword(PASSWORD);
-        factory.setHost(RABBITMQ_HOST); 
-         try {
-             System.out.println("ola");
-             Connection connection = (Connection) factory.newConnection();
-              channel = connection.createChannel();
-              System.out.println("ola");
-         } catch (IOException ex) {
-             Logger.getLogger(EnviarColaMensajeria.class.getName()).log(Level.SEVERE, null, ex);
-         } catch (TimeoutException ex) {
-             Logger.getLogger(EnviarColaMensajeria.class.getName()).log(Level.SEVERE, null, ex);
-         }
+        factory.setHost(RABBITMQ_HOST);
+        try {
+            Connection connection = factory.newConnection();
+            channel = connection.createChannel();
+        } catch (IOException | TimeoutException ex) {
+            Logger.getLogger(EnviarColaMensajeria.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
-    public void construirMensaje(String mensaje){
-        
+
+    public void construirMensaje(String mensaje) throws Exception {
         SensorDAO datosS = new SensorDAO();
         InvernaderoDAO datosI = new InvernaderoDAO();
         AlarmaDAO datosA = new AlarmaDAO();
-        
-        String[] valores=mensaje.split(":");
-        List<Sensor> sensores = new ArrayList<>();        
-        List<Invernadero> invernaderos = new ArrayList<>();  
+
+        String[] valores = mensaje.split(":");
+        List<Sensor> sensores = new ArrayList<>();
+        List<Invernadero> invernaderos = new ArrayList<>();
         List<Alarma> alarmas = new ArrayList<>();
-        
+
         sensores = datosS.colsultar();
         invernaderos = datosI.colsultar();
         alarmas = datosA.colsultar();
-        
-        
-        //Compara los datos que llegaron con los datos que están en la base de 
-        //la alarma si sobrepasa se envía un message
+
+        //Compara los datos que llegaron con los datos que están en la base de la alarma si sobrepasa se envía un message
         for (Sensor sensor : sensores) {
-            if (sensor.getClave_sensor() .equalsIgnoreCase(valores[0]) ) {
-
+            if (sensor.getClave_sensor().equalsIgnoreCase(valores[0])) {
                 for (Alarma alarma : alarmas) {
-
                     if (alarma.getIdAlarma() == sensor.getId_alarma()) {
-                          if(alarma.getLimite_humedad() <= 
-                                  Double.parseDouble(valores[2])
-                                  || alarma.getLimite_temperatura() <= 
-                                  Double.parseDouble(valores[3])){
-                                  System.out.println(alarma.getLimite_humedad()+":"+valores[2]);
-                                  System.out.println(alarma.getLimite_temperatura()+":"+valores[3]);
-                                for(Invernadero invernadero : invernaderos){
-                                  
-                                  if(sensor.getId_invernadero() == invernadero.getIdInvernadero()){
-                                      
-                                      mensaje = mensaje.concat(":" + invernadero.getNombre() + ":" + invernadero.getDireccion());
-                                      this.enviarMensajeAlerta(mensaje);
-                                      
-                                  }
-                                  
-                              }
-                              
-                          }
+                        if (alarma.getLimite_humedad() <= Double.parseDouble(valores[2])
+                                || alarma.getLimite_temperatura() <= Double.parseDouble(valores[3])) {
+                            for (Invernadero invernadero : invernaderos) {
+                                if (sensor.getId_invernadero() == invernadero.getIdInvernadero()) {
+                                    mensaje = mensaje.concat(":" + invernadero.getNombre() + ":" + invernadero.getDireccion());
+                                    // Encriptar el mensaje antes de enviarlo
+                                    String mensajeEncriptado = EncriptarMensaje.encriptar(mensaje);
+                                    this.enviarMensajeAlerta(mensajeEncriptado);
+                                }
+                            }
+                        }
                     }
-
                 }
-
             }
         }
     }
-    
-    
 
     public void enviarMensajeAlerta(String mensaje) {
-        
         try {
             channel.queueDeclare(QUEUE_NAME, false, false, false, null);
             channel.basicPublish("", QUEUE_NAME, null, mensaje.getBytes());
             System.out.println("[x] Sent '" + mensaje + "'");
-
         } catch (Exception ex) {
-            
             System.out.println(ex);
-            
-        } 
+        }
     }
 }

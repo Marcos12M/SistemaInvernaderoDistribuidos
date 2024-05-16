@@ -22,7 +22,7 @@ public class SensorDAO implements IDetector{
     private Conexion conexion;
 
     public SensorDAO() {
-        conexion = new Conexion("mysql", "3306", "invernadero", "root", "12345");
+        conexion = new Conexion("localhost", "3306", "invernadero", "root", "1234");
     }
 
     @Override

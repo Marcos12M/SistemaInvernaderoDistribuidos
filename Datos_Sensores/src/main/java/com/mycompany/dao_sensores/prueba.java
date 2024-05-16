@@ -21,7 +21,7 @@ public class prueba {
         LocalDateTime fechaHoraActual = LocalDateTime.now();
         Timestamp timestamp = Timestamp.valueOf(fechaHoraActual);
         // Crear una instancia de DatosDAO con los parámetros de conexión
-        DatosDAO datosDAO = new DatosDAO("localhost", "3306", "DatosSensores", "root", "12345");
+        DatosDAO datosDAO = new DatosDAO("localhost", "3306", "DatosSensores", "root", "1234");
 
         // Crear datos de prueba
         Datos datos = new Datos("1", "Sensor de Humedad", 75.5, 25.3, fechaHoraActual, "MarcaXYZ");

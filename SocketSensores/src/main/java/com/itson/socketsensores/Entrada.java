@@ -55,6 +55,8 @@ public class Entrada implements Runnable {
 
         } catch (IOException ex) {
             Logger.getLogger(Entrada.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Entrada.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

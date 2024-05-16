@@ -28,16 +28,11 @@ public class AgregarSensor extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ManagerInvernadero manager = new ManagerInvernadero();
         System.out.println("gola");
-        if (verificarConexionDB() && manager.existenInvernaderos()) {
-            response.sendRedirect("agregar_sensor.jsp");
-        } else {
-             String mensajeError = "Condiciones previas no cumplidas. Verifique la conexión a la base de datos y que existan invernaderos.";
-            response.sendRedirect("index.html?error=" + URLEncoder.encode(mensajeError, "UTF-8"));
-      }
+        response.sendRedirect("agregar_sensor.jsp");
     }
 
     private boolean verificarConexionDB() {
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://mysql:3306/invernadero", "root", "12345")) {
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://mysql:3306/invernadero", "root", "1234")) {
             return true;
         } catch (SQLException e) {
             return false;
